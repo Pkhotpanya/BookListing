@@ -7,7 +7,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,13 +29,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private Button mButtonSearch;
     private TextView mTextViewResponse;
     private ProgressBar mProgressBar;
-    private static final String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=1";
+    private static final String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?maxResults=10&q=";
     private BookAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mEditTextSearch = (EditText) findViewById(R.id.edittext_genre);
+        mEditTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_NULL
+                        && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    searchGenre();
+                }
+                return true;
+            }
+        });
+        mButtonSearch = (Button) findViewById(R.id.button_search);
+        mButtonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchGenre();
+            }
+        });
 
         mTextViewResponse = (TextView) findViewById(R.id.textview_response);
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar_lookbusy);
@@ -51,13 +74,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             getLoaderManager().initLoader(0, null, this).forceLoad();
         } else {
             mProgressBar.setVisibility(View.GONE);
-            mTextViewResponse.setText("No internet connection.");
+            mTextViewResponse.setText(R.string.response_no_internet);
         }
     }
 
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
-        return new BookAsycTaskLoader(this, URL_BOOKS);
+        return new BookAsycTaskLoader(this, URL_BOOKS + mEditTextSearch.getText().toString());
     }
 
     @Override
@@ -65,15 +88,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mProgressBar.setVisibility(View.GONE);
         mAdapter.clear();
 
-        if (!books.isEmpty() && books != null){
+        if (books != null && !books.isEmpty()) {
             mAdapter.addAll(books);
         } else {
-            mTextViewResponse.setText("Sorry, no books.");
+            mTextViewResponse.setText(R.string.response_no_books);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mTextViewResponse.setText("");
+        mAdapter.clear();
+    }
+
+    private void searchGenre() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+
+        getLoaderManager().restartLoader(0, null, MainActivity.this).forceLoad();
         mProgressBar.setVisibility(View.VISIBLE);
         mTextViewResponse.setText("");
         mAdapter.clear();

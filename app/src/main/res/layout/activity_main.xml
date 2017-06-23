@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.booklisting.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/linearlayout_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:orientation="horizontal"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -25,38 +25,44 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Genre to search for..." />
+                android:hint="@string/genre_to_search_for"
+                android:maxLines="1" />
 
             <Button
                 android:id="@+id/button_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search" />
+                android:text="@string/search" />
 
         </LinearLayout>
 
         <View
+            android:id="@+id/view_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_below="@id/linearlayout_search"
             android:layout_margin="8dp"
             android:background="@android:color/black" />
 
         <ListView
             android:id="@+id/listview_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/view_line" />
 
         <TextView
             android:id="@+id/textview_response"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="" />
 
         <ProgressBar
             android:id="@+id/progressbar_lookbusy"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

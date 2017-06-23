@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Book Listing</string>
+    <string name="response_no_books">Sorry, no books.</string>
+    <string name="response_no_internet">No internet connection.</string>
+    <string name="genre_to_search_for">Genre to search for...</string>
+    <string name="search">Search</string>
 </resources>
