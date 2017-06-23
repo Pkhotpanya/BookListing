@@ -8,19 +8,19 @@ import java.util.List;
 
 public class Book {
 
-    private String mTitle;
-    private List<String> mAuthors;
+    private String bookTitle;
+    private List<String> bookAuthors;
 
     public Book(String title, List<String> authors) {
-        mTitle = title;
-        mAuthors = authors;
+        bookTitle = title;
+        bookAuthors = authors;
     }
 
     public String getTitle() {
-        return mTitle;
+        return bookTitle;
     }
 
     public List<String> getAuthors() {
-        return mAuthors;
+        return bookAuthors;
     }
 }

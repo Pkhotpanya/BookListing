@@ -6,6 +6,7 @@ package com.example.android.booklisting;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,11 @@ import java.util.List;
 import static android.R.id.list;
 
 public final class QueryUtils {
+
+    private static final String ITEMS = "items";
+    private static final String TITLE = "title";
+    private static final String AUTHORS = "authors";
+    private static final String VOLUMEINFO = "volumeInfo";
 
     private QueryUtils() {
     }
@@ -116,12 +122,12 @@ public final class QueryUtils {
 
         try {
             JSONObject jsonObject = new JSONObject(bookJSON);
-            JSONArray featuresArray = jsonObject.optJSONArray("items");
+            JSONArray featuresArray = jsonObject.optJSONArray(ITEMS);
             for (int i = 0; i < featuresArray.length(); i++) {
                 JSONObject temp = featuresArray.optJSONObject(i);
-                JSONObject volumeInfo = temp.getJSONObject("volumeInfo");
-                String title = volumeInfo.getString("title");
-                JSONArray authors = volumeInfo.optJSONArray("authors");
+                JSONObject volumeInfo = temp.getJSONObject(VOLUMEINFO);
+                String title = volumeInfo.getString(TITLE);
+                JSONArray authors = volumeInfo.optJSONArray(AUTHORS);
                 List<String> authorList = new ArrayList<String>();
                 for (int authorsIndex = 0; authorsIndex < authors.length(); authorsIndex++) {
                     authorList.add(authors.getString(authorsIndex));

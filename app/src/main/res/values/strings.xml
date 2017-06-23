@@ -4,4 +4,5 @@
     <string name="response_no_internet">No internet connection.</string>
     <string name="genre_to_search_for">Genre to search for...</string>
     <string name="search">Search</string>
+    <string name="search_directions">No books. Please enter a different genre in the text field to start a new search.</string>
 </resources>

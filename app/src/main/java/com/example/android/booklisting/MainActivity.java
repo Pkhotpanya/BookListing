@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (books != null && !books.isEmpty()) {
             mAdapter.addAll(books);
         } else {
-            mTextViewResponse.setText(R.string.response_no_books);
+            mTextViewResponse.setText(R.string.search_directions);
         }
     }
 
@@ -109,9 +109,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
 
-        getLoaderManager().restartLoader(0, null, MainActivity.this).forceLoad();
-        mProgressBar.setVisibility(View.VISIBLE);
-        mTextViewResponse.setText("");
-        mAdapter.clear();
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (isConnected) {
+            getLoaderManager().restartLoader(0, null, MainActivity.this).forceLoad();
+            mProgressBar.setVisibility(View.VISIBLE);
+            mTextViewResponse.setText("");
+            mAdapter.clear();
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            mTextViewResponse.setText(R.string.response_no_internet);
+        }
     }
 }
